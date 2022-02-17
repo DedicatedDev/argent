@@ -17,4 +17,46 @@
     If we rely only on those 3 params and assume the owner would try to manipulate the winner, he/she must let the wanted address participate at proper index and control later participants.
     In order words, the owner must control all addresses, it's impossible in general and if possible, the owner doesn't get any profit.
     So this approach is possible to predicate but hard to manipulate, I think.
+
+# 3
+    all calculation is based on doc
+    https://docs.aave.com/risk/asset-risk/risk-parameters
+
+    ASSET   Position in tokens          Price       Max     Liquidation     APY
+            (positive for collateral    per         LTV     threshold
+            negative for debt)          token
+    -----------------------------------------------------------------------------
+    ETH     100                         2000$        0.8       0.825         2%
+    DAI     100 000                     1$           0.75      0.8           10%
+    USDC    -150 000                    1$           0.8       0.85          15%
+
+    A. What is the Health Factor for this position?
+    Hf = Sum(Collateral in ETH * Liquidation Threshold)/Total Borrow in ETH
+    Hf = (100*2000*0.825 + 100,000*0.75*0.8)/(150,000) = 192,000/150,000 = 1.28
+
+    B. At what ETH price will your position be at risk of liquidation?
+    Start Point:
+    Borrow Amount = possible Lender Amount
+    150,000 - 100,000*0.75*0.8 = 90,000
+    90,000 = 100 * x * MLTV*LT
+    x = 90,000/100*0.8*0.825 = 1363.63$
+
+    C.How many more USDC can you borrow while keeping a Health Factor > 1.2?
+    Max 192,000
+    Possible: 192,000 / HF = 160,000
+    Already Borrowed Amount: 150,000
+    thus: 160,000 - 150,000 = 10,000
+
+    D.How many more USDC will the protocol allow you to borrow?
+    This is means HF = 1
+    so  192,000 - 150,000 = 32,000
+
+    E. Assuming the prices and APY rates stay constant, in approximately how many years will your position be at risk of liquidation?
+    Need to solve this expression:
+    132,000 * 1.02^x + 6,000 * 1.1^x < 150,000 * 1.15^x
+    x = 1   134.64 + 66  > 172.5
+    x = 2   137.3328 + 72.6 > 198.375
+    x = 3   140.0794 + 79.86 < 228.131
+    so after 3 year, my position is in risk of liquidation. 
     
+
