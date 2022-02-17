@@ -1,17 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 
-contract ETHSplitter is Ownable {
+contract ETHSplitter is OwnableUpgradeable {
     using EnumerableSet for EnumerableSet.AddressSet;
     EnumerableSet.AddressSet internal _payees;
-    constructor(address[] memory payees) {
+    function initialize(address[] memory payees, address _owner) public initializer {
+        __Ownable_init();
+        transferOwnership(_owner);
         for (uint256 i = 0; i < payees.length; i++) {
             _payees.add(payees[i]);
         }
     }
-
     function addPayee(address newPayee) public onlyOwner {
         require(newPayee != address(0),"ETHSplitter: invalid address");
         _payees.add(newPayee);

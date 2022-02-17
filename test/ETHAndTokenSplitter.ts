@@ -37,11 +37,9 @@ describe("ETHAndTokenSplitter",async()=>{
 
         //Main Contract Deploy
         ETHAndTokenSplitterFactory = await ethers.getContractFactory("ETHAndTokenSplitter")
-        ethAndTokenSplitter = await ETHAndTokenSplitterFactory.deploy(myPayees.map(item=>item.address));
+        ethAndTokenSplitter = await ETHAndTokenSplitterFactory.deploy();
+        ethAndTokenSplitter.initialize(myPayees.map(payee=>payee.address),accounts[0].address)
         await ethAndTokenSplitter.deployed();
-
-    
-        
     })
 
     it("should be work with ETH", async()=>{

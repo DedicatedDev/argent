@@ -13,8 +13,8 @@ describe("ETHSplitter", async()=>{
         accounts = await ethers.getSigners();
         ETHSplitter = await ethers.getContractFactory("ETHSplitter");
         //Add initial payees when contract is deployed
-        ethSplitter = await ETHSplitter.deploy([accounts[1].address]);
-        myPayees.add(accounts[1])
+        ethSplitter = await ETHSplitter.deploy();
+        await ethSplitter.initialize([],accounts[0].address)
         await ethSplitter.deployed();
     })
 
