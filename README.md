@@ -1,6 +1,7 @@
 # 1
     Factory can set init user group and owner. 
-    after create splitter, ownership assign to owner which is address from factory createSplitter method. 
+    after create splitter, ownership assign to owner which is address from factory
+     createSplitter method. 
     Of course it is possible to use Access control for more complex authentication access level. 
     but I've added only simple ownable here. 
 # 2
@@ -62,7 +63,8 @@
     This is means HF = 1
     so  192,000 - 150,000 = 32,000
 
-    E. Assuming the prices and APY rates stay constant, in approximately how many years will your position be at risk of liquidation?
+    E. Assuming the prices and APY rates stay constant, in approximately 
+    how many years will your position be at risk of liquidation?
     Need to solve this expression:
     132,000 * 1.02^x + 6,000 * 1.1^x < 150,000 * 1.15^x
     x = 1   134.64 + 66  > 172.5
