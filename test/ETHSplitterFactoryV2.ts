@@ -34,9 +34,12 @@ describe("ETHSplitterFactoryV2", async()=>{
 
     })
 
+    it("should be owner is account[1]", async()=>{
+        const owner = await splitterFactory.owner()
+        expect(owner == accounts[1].address)
+    })
     it("should create splitter", async()=>{
         const userPayees = [accounts[4].address, accounts[5].address]
-        console.log("owner:=>",await splitterFactory.owner())
         const tx = await splitterFactory.createSplitter(userPayees, accounts[10].address)
         console.log("Gas fee in Factory V2:",tx.gasPrice)
         let createdSplitterAddress = await splitterFactory.splitterForUser(accounts[1].address)
@@ -46,5 +49,9 @@ describe("ETHSplitterFactoryV2", async()=>{
     it("should reject recreate Splitter", async()=>{
         let userPayees = [accounts[4].address, accounts[5].address]
         await expect(splitterFactory.createSplitter(userPayees,accounts[10].address)).to.revertedWith("ETHsplitterFactory: already created")
+    })
+    it("should reject none owner of Factory", async()=>{
+        let userPayees = [accounts[4].address, accounts[5].address]
+        await expect(splitterFactory.connect(accounts[3]).createSplitter(userPayees,accounts[10].address)).to.reverted
     })
 })
