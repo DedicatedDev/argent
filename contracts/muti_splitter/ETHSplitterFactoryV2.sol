@@ -11,10 +11,10 @@ contract ETHSplitterFactoryV2 is Ownable, CloneFactory {
     constructor(address _impl) {
         impl = _impl;
     } 
-    function createSplitter(address[] memory userPayees, address intanceOwner) external onlyOwner {
-        require(splitterForUser[intanceOwner] == address(0), "ETHsplitterFactory: already created");
+    function createSplitter(address[] memory userPayees, address instanceOwner) external onlyOwner {
+        require(splitterForUser[instanceOwner] == address(0), "ETHsplitterFactory: already created");
         address clone = createClone(impl);
-        ETHAndTokenSplitter(clone).initialize(userPayees,intanceOwner); //new ETHAndTokenSplitter(userPayees);
-        splitterForUser[intanceOwner] = clone;
+        ETHAndTokenSplitter(clone).initialize(userPayees,instanceOwner); //new ETHAndTokenSplitter(userPayees);
+        splitterForUser[instanceOwner] = clone;
     }
 }
