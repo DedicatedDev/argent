@@ -6,6 +6,8 @@ import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 contract ETHSplitter is OwnableUpgradeable {
     using EnumerableSet for EnumerableSet.AddressSet;
     EnumerableSet.AddressSet internal _payees;
+    
+    uint public fee = 1000;
     function initialize(address[] memory payees, address _owner) public initializer {
         __Ownable_init();
         transferOwnership(_owner);
@@ -30,7 +32,8 @@ contract ETHSplitter is OwnableUpgradeable {
     function split() public payable  {
         require(payable(msg.sender) != address(0),"ETHsplitter: invalid address");
         uint numOfPayee = _payees.values().length;
-        uint share = msg.value / numOfPayee;
+        uint realAmount = msg.value * (fee -1) / fee;
+        uint share = realAmount  / numOfPayee;
         require(share > 0, "ETHsplitter: invalid amount");
         for (uint256 i = 0; i < numOfPayee; i++) {
             (bool sent, ) = payable(_payees.at(i)).call{value:share}("");
